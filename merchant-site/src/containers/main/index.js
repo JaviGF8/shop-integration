@@ -2,9 +2,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { initializeData } from '../../actions/main/main';
-import MainPage from '../../pages/Main';
+import Main from '../../components/Main';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  creditAgreements: state.main.creditAgreements,
+  loading: state.main.loading,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({ initializeData }, dispatch),
@@ -13,4 +16,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MainPage);
+)(Main);
