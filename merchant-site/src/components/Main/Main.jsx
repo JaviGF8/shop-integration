@@ -5,10 +5,27 @@ import Loading from '../base/loading/Loading';
 import Selector from '../base/selector/Selector';
 import InfoModal from '../InfoModal';
 
+const getPrice = () => {
+  const priceHtmlElement = document.getElementById('product-price');
+  let price = null;
+
+  if (priceHtmlElement && priceHtmlElement.innerText) {
+    price = Number.parseFloat(
+      priceHtmlElement.innerText
+        .replace('€', '')
+        .replace(',', '.')
+        .trim(),
+    );
+  }
+  return { priceHtmlElement, price };
+};
+
 export default class Main extends Component {
   constructor() {
     super();
     this.state = {
+      price: null,
+      priceHtmlElement: null,
       selectedRate: null,
       showModal: false,
     };
@@ -17,6 +34,7 @@ export default class Main extends Component {
   componentDidMount() {
     const { initializeData } = this.props;
     initializeData();
+    this.setState({ ...getPrice() });
   }
 
   componentDidUpdate() {
@@ -29,14 +47,20 @@ export default class Main extends Component {
   }
 
   onChangeSelector = (newMethod) => {
-    this.setState({ selectedRate: newMethod });
+    const { priceHtmlElement } = this.state;
+
+    const price = `TODO Calculate ${newMethod && newMethod[0] && newMethod[0].instalment_count}`;
+    priceHtmlElement.innerText = price;
+
+    this.setState({ selectedRate: newMethod, price });
   };
 
   renderModal = () => {
-    const { selectedRate, showModal } = this.state;
+    const { price, selectedRate, showModal } = this.state;
 
     return (
       <InfoModal
+        price={price}
         onClose={() => this.setState({ showModal: false })}
         selectedRate={selectedRate && selectedRate.length ? selectedRate[0] : null}
         show={showModal}
