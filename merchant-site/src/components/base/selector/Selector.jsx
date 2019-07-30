@@ -1,56 +1,37 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import Select from 'react-dropdown-select';
 
 import './index.scss';
 
 export default class Selector extends Component {
-  constructor() {
-    super();
-    this.state = {
-      collapsed: true,
-      selected: null,
-    };
-  }
+  calculatePrice = () => 'TODO Calculate';
 
-  renderOption = (option) => {
-    const { labelKey } = this.props;
+  contentRenderer = (item) => (
+    <span>
+      Págalo en {item.instalment_count} cuotas de {this.calculatePrice()} €
+    </span>
+  );
 
-    return <div>{option && option[labelKey]}</div>;
-  };
+  itemRenderer = ({ item, methods }) => (
+    <button type="button" className="option-btn" onClick={() => methods.addItem(item)}>
+      {this.contentRenderer(item)}
+    </button>
+  );
 
   render() {
-    const { collapsed, selected } = this.state;
-    const { labelKey, emptyMessage, options, valueKey } = this.props;
+    const { ...rest } = this.props;
 
     return (
-      <div className="selector">
-        <div className="selector-input">
-          <span>{(selected && selected[labelKey]) || emptyMessage}</span>
-          <button
-            className={`selector-options${collapsed ? ' collapsed' : ''}`}
-            onClick={() => this.setState({ collapsed: !collapsed })}
-            type="button">
-            {'>'}
-          </button>
-        </div>
-        <div className={`selector-options${collapsed ? ' collapsed' : ''}`}>
-          {options && 0 < options.length ? options.map(this.renderOption) : null}
-        </div>
-      </div>
+      <Select
+        {...rest}
+        className="rate-selector"
+        itemRenderer={this.itemRenderer}
+        contentRenderer={({ state }) =>
+          state && state.values && state.values.length ?
+            this.contentRenderer(state.values[0]) :
+            'Ninguna tarifa seleccionada'
+        }
+      />
     );
   }
 }
-
-Selector.defaultProps = {
-  emptyMessage: 'No data selected',
-  labelKey: 'label',
-  options: [],
-  valueKey: 'value',
-};
-
-Selector.propTypes = {
-  emptyMessage: PropTypes.string,
-  labelKey: PropTypes.string,
-  options: PropTypes.array,
-  valueKey: PropTypes.string,
-};

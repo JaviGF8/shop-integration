@@ -4,13 +4,25 @@ import Loading from '../base/loading/Loading';
 import Selector from '../base/selector/Selector';
 
 export default class Main extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedMethod: null,
+    };
+  }
+
   componentDidMount() {
     const { initializeData } = this.props;
     initializeData();
   }
 
+  onChangeSelector = (newMethod) => {
+    this.setState({ selectedMethod: newMethod });
+  };
+
   render() {
     const { creditAgreements, loading } = this.props;
+    const { selectedMethod } = this.state;
 
     if (loading) {
       return <Loading />;
@@ -21,7 +33,13 @@ export default class Main extends Component {
           <span>Págalo en</span>
           <button type="button">más info</button>
         </div>
-        <Selector labelKey="instalment_count" options={creditAgreements} valueKey="instalment_count" />
+        <Selector
+          labelField="instalment_count"
+          onChange={this.onChangeSelector}
+          options={creditAgreements}
+          valueField="instalment_count"
+          value={selectedMethod}
+        />
       </div>
     );
   }
