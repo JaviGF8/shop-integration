@@ -4,16 +4,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(black, 0.05);
+  background-color: rgba(black, 0.2);
   z-index: 999;
+  transition: all 0.2s;
+  opacity: 1;
 
   .modal-wrapper {
     background-color: white;
     border: 1px solid #d0cccc;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
     margin: 100px auto 0;
-    transition: all 0.8s;
-    width: 60%;
+    width: 95%;
+    max-width: 900px;
+    opacity: 1;
+    transform: translateY(0vh);
+    transition: all 0.2s;
 
     button {
       outline: 0;
@@ -59,5 +64,13 @@
       justify-content: flex-end;
       padding: 10px 20px;
     }
+  }
+}
+.modal-container.hidden {
+  opacity: 0;
+
+  .modal-wrapper {
+    opacity: 0;
+    transform: translateY(-100vh);
   }
 }

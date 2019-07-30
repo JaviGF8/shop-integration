@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import Loading from '../base/loading/Loading';
 import Selector from '../base/selector/Selector';
-import Modal from '../base/modal/Modal';
+import InfoModal from '../InfoModal';
 
 export default class Main extends Component {
   constructor() {
     super();
     this.state = {
-      selectedMethod: null,
+      selectedRate: null,
       showModal: false,
     };
   }
@@ -18,17 +19,36 @@ export default class Main extends Component {
     initializeData();
   }
 
+  componentDidUpdate() {
+    const { selectedRate } = this.state;
+    const { creditAgreements } = this.props;
+
+    if (!selectedRate && creditAgreements && creditAgreements.length) {
+      this.setState({ selectedRate: [ creditAgreements[0] ] });
+    }
+  }
+
   onChangeSelector = (newMethod) => {
-    this.setState({ selectedMethod: newMethod });
+    this.setState({ selectedRate: newMethod });
   };
 
-  renderModal = () => <Modal close={() => this.setState({ showModal: false })} />;
+  renderModal = () => {
+    const { selectedRate, showModal } = this.state;
+
+    return (
+      <InfoModal
+        onClose={() => this.setState({ showModal: false })}
+        selectedRate={selectedRate && selectedRate.length ? selectedRate[0] : null}
+        show={showModal}
+      />
+    );
+  };
 
   render() {
     const { creditAgreements, loading } = this.props;
-    const { selectedMethod, showModal } = this.state;
+    const { selectedRate } = this.state;
 
-    if (loading) {
+    if (loading || !selectedRate || !selectedRate.length) {
       return <Loading />;
     }
     return (
@@ -40,13 +60,12 @@ export default class Main extends Component {
           </button>
         </div>
         <Selector
-          labelField="instalment_count"
           onChange={this.onChangeSelector}
           options={creditAgreements}
           valueField="instalment_count"
-          value={selectedMethod}
+          values={selectedRate}
         />
-        {showModal && this.renderModal()}
+        {this.renderModal()}
       </div>
     );
   }
