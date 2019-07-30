@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { initializeData } from '../../actions/main/main';
+import { initializeData, setEvent } from '../../actions/main/main';
 import Main from '../../components/Main';
 
 const mapStateToProps = (state) => ({
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  ...bindActionCreators({ initializeData }, dispatch),
+  ...bindActionCreators({ initializeData, setEvent }, dispatch),
 });
 
 export default connect(

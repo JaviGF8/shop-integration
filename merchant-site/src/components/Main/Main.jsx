@@ -69,7 +69,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { creditAgreements, loading } = this.props;
+    const { creditAgreements, loading, setEvent } = this.props;
     const { selectedRate } = this.state;
 
     if (loading || !selectedRate || !selectedRate.length) {
@@ -79,7 +79,7 @@ export default class Main extends Component {
       <div className="payment-component">
         <div className="payment-header">
           <span>Págalo en</span>
-          <button type="button" onClick={() => this.setState({ showModal: true })}>
+          <button type="button" onClick={(event) => this.setState({ showModal: true }, () => setEvent(event))}>
             más info
           </button>
         </div>
@@ -104,4 +104,5 @@ Main.propTypes = {
   creditAgreements: PropTypes.array,
   initializeData: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  setEvent: PropTypes.func.isRequired,
 };

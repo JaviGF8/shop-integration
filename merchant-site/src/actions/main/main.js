@@ -32,8 +32,12 @@ export const setEvent = (event) => () =>
   new Promise((resolve, reject) => {
     axios
       .post('http://localhost:8080/events', event)
-      .then((data) => {
-        resolve(data);
+      .then((response) => {
+        if (response && 200 === response.status && !response.data) {
+          resolve(response);
+        } else {
+          reject(new Error('Something went wrong'));
+        }
       })
       .catch((error) => {
         reject(error);
